@@ -1,0 +1,101 @@
+.signature {
+    display: flex;
+    justify-content: center;
+    padding: 3rem 0;
+    border-top: 0px solid #318CE7;
+    color: #5d6c89;
+    font-weight: 500;
+    bottom: 5px;
+    padding-bottom: 10px;
+    position: absolute;
+}
+
+.signature a {
+    color: #fff;
+    font-size: 110%;
+}
+
+a {
+    color: #ffcb36;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: 700;
+    display: inline-block;
+}
+
+*, ::after, ::before {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+.signature .right {
+    text-align: left;
+}
+
+
+.love {
+    padding: 0 .4rem;
+    animation: 1.5s heartThrob infinite;
+}
+
+.love svg {
+    height: 1.75rem;
+}
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+.signature .right {
+    text-align: left;
+}
+
+div {
+    display: block;
+}
+
+.signature .left, .signature .right {
+    flex: 1 0 auto;
+    color: #318CE7;
+}
+
+.signature a {
+    color: #318CE7;
+    font-size: 110%;
+}
+
+a {
+    color: #ffcb36;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: 700;
+    display: inline-block;
+}
+
+.signature .right {
+    text-align: left;
+}
+
+a:-webkit-any-link {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+@keyframes heartThrob
+{
+
+10% {
+    transform: scale(1.15);
+}
+20% {
+    transform: scale(1);
+}
+40% {
+    transform: scale(1.15);
+}
+60% {
+    transform: scale(1);
+}
+}
