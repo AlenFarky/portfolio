@@ -1392,6 +1392,14 @@ select.portfolio-filter-mobile {
   font-size: 14px;
   color: #8B88B1;
 }
+
+.mails {
+  position: absolute;
+  color: #000;
+  bottom: 2.5%;
+  left: 10%;
+}
+
 .blog-item .meta li:not(:last-child) {
   margin-right: 0.6rem;
 }
