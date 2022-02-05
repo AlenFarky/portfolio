@@ -2279,24 +2279,16 @@ body.dark .blog-page-section .blog-single {
 
 .social-icons li:nth-child(1) a:hover
 {
-  color:  #e4405f !important;
+  color:  #4867AA !important;
 }
 .social-icons li:nth-child(2) a:hover
 {
-  color: #55acee !important;
+  color: #ED4B62 !important;
 }
 
 .social-icons li:nth-child(3) a:hover
 {
-  color: #007ee5 !important;
-}
-.social-icons li:nth-child(4) a:hover
-{
-  color: #ea4c89 !important;
-}
-.social-icons li:nth-child(5) a:hover
-{
-  color: #bd081c !important;
+  color: #5DA9DD !important;
 }
 
 /* === Go to Top === */
