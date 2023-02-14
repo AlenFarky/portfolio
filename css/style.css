@@ -951,7 +951,7 @@ section.home.light .social-icons li a {
   color: #353353;
 }
 section.home.light .social-icons li a:hover {
-  color: #FFD15C;
+  /*color: #FFD15C;*/
 }
 
 .section-title {
@@ -2284,11 +2284,21 @@ body.dark .blog-page-section .blog-single {
 .social-icons li:nth-child(2) a:hover
 {
   color: #ED4B62 !important;
+  background: -webkit-radial-gradient(33% 100% circle, #FED373 4%, #F15245 30%, #D92E7F 62%, #9B36B7 85%, #515ECF);
+  background: radial-gradient(circle at 33% 100%, #FED373 4%, #F15245 30%, #D92E7F 62%, #9B36B7 85%, #515ECF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .social-icons li:nth-child(3) a:hover
 {
   color: #5DA9DD !important;
+}
+
+.social-icons li:nth-child(4) a:hover
+{
+  background:-webkit-linear-gradient(33% 100% circle, #1F11CE 0%, #E52B2B 100%);
+  color: #FF5E73 !important;
 }
 
 /* === Go to Top === */
@@ -2307,7 +2317,7 @@ body.dark .blog-page-section .blog-single {
   -webkit-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
-  box-shadow: -7px -7px 20px 0px #fff9, -4px -4px 5px 0px #fff9, 7px 7px 20px 0px #0002, 4px 4px 5px 0px #0001, inset 0px 0px 0px 0px #fff9, inset 0px 0px 0px 0px #0001, inset 0px 0px 0px 0px #fff9, inset 0px 0px 0px 0px #0001;
+  box-shadow: -8px -8px 20px 0px #fff9, -4px -4px 30px 0px #fff9, 7px 7px 20px 0px #0002, 4px 4px 5px 0px #0001, inset 0px 0px 0px 0px #fff9, inset 0px 0px 0px 0px #0001, inset 0px 0px 0px 0px #fff9, inset 0px 0px 0px 0px #0001;
 }
 
 #return-to-top i {
