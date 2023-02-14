@@ -2297,7 +2297,6 @@ body.dark .blog-page-section .blog-single {
 
 .social-icons li:nth-child(4) a:hover
 {
-  background:-webkit-linear-gradient(33% 100% circle, #1F11CE 0%, #E52B2B 100%);
   color: #FF5E73 !important;
 }
 
