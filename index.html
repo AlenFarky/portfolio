@@ -632,7 +632,7 @@
 						  <input type="text" name="_honey" style="display: none;">
                           			  <input type="hidden" name="_captcha" value="false">
 
-						  <input type="hidden" name="_next" value="https://farky.xyz">
+						  <input type="hidden" name="_next">
 						  <div class="form-group">
 							  <label for="firstName"><input type="text" class="form-control" name="InputName" id="InputName" placeholder="Your name" required="required" data-error="Name is required."></label>
 						  </div>
@@ -643,10 +643,51 @@
 						  <div class="form-group">
 							<label for="message"><textarea name="InputMessage" id="InputMessage" class="form-control" rows="5" placeholder="Message" required="required" data-error="Message is required."></textarea></label>
 						  </div>
-
 							
 							<br/>
 						  <button type="submit" id="submit" value="Submit" class="btn btn-default">Send Message</button>
+
+							  <script>
+    document.getElementById('contact-form').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent default form submission
+
+      // Send the form data
+      fetch(this.action, {
+        method: 'POST',
+        body: new FormData(this),
+        headers: { 'Accept': 'application/json' }
+      })
+      .then(response => {
+        if (response.ok) {
+          // Show success alert
+          swal({
+            title: "Thanks!", 
+            text: "Your form is successfully submitted!", 
+            icon: "success",
+            button: "Back to website"
+          });
+        } else {
+          // Show error alert
+          swal({
+            title: "Oops!", 
+            text: "There is some kind of error, try again later...", 
+            icon: "error", 
+            button: "Back to website"
+          });
+        }
+      })
+      .catch(error => {
+        // Show error alert if there's a network error
+        swal({
+          title: "Oops!", 
+          text: "There is some kind of error, try again later...", 
+          icon: "error", 
+          button: "Back to website"
+        });
+      });
+    });
+  </script>
+							
 						</form>
 					  </div>
                   
@@ -668,6 +709,7 @@
 
 <!-- SCRIPTS -->
 <script src="https://formspree.io/js/formbutton-v1.min.js" defer></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="js/jquery-1.12.3.min.js"></script>
 <script src="js/jquery.easing.min.js"></script>
 <script src="js/jquery.waypoints.min.js"></script>
