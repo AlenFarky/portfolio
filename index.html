@@ -631,8 +631,8 @@
 						<form action="https://formsubmit.co/c1a4565bb0ee860e10689d63fbed3dca" method="POST" id="contact-form">
 						  <input type="text" name="_honey" style="display: none;">
                           			  <input type="hidden" name="_captcha" value="false">
-
 						  <input type="hidden" name="_next">
+							
 						  <div class="form-group">
 							  <label for="firstName"><input type="text" class="form-control" name="InputName" id="InputName" placeholder="Your name" required="required" data-error="Name is required."></label>
 						  </div>
@@ -646,47 +646,6 @@
 							
 							<br/>
 						  <button type="submit" id="submit" value="Submit" class="btn btn-default">Send Message</button>
-
-							  <script>
-    document.getElementById('contact-form').addEventListener('submit', function(event) {
-      event.preventDefault(); // Prevent default form submission
-
-      // Send the form data
-      fetch(this.action, {
-        method: 'POST',
-        body: new FormData(this),
-        headers: { 'Accept': 'application/json' }
-      })
-      .then(response => {
-        if (response.ok) {
-          // Show success alert
-          swal({
-            title: "Thanks!", 
-            text: "Your form is successfully submitted!", 
-            icon: "success",
-            button: "Back to website"
-          });
-        } else {
-          // Show error alert
-          swal({
-            title: "Oops!", 
-            text: "There is some kind of error, try again later...", 
-            icon: "error", 
-            button: "Back to website"
-          });
-        }
-      })
-      .catch(error => {
-        // Show error alert if there's a network error
-        swal({
-          title: "Oops!", 
-          text: "There is some kind of error, try again later...", 
-          icon: "error", 
-          button: "Back to website"
-        });
-      });
-    });
-  </script>
 							
 						</form>
 					  </div>
@@ -697,7 +656,50 @@
 			</div>
 
 		</div>
-	
+
+
+<script>
+    document.getElementById('contact-form').addEventListener('submit', function(event) {
+      event.preventDefault(); 
+
+      fetch(this.action, {
+        method: 'POST',
+        body: new FormData(this),
+        headers: { 'Accept': 'application/json' }
+      })
+      .then(response => {
+        if (response.ok) {
+          swal({
+            title: "Thanks for reaching out!", 
+            text: "Expect a response shortly.", 
+            icon: "success",
+            button: "Back to website"
+          }).then(() => {
+            
+            document.getElementById('contact-form').reset();
+          });
+        } else {
+         
+          swal({
+            title: "Oops!", 
+            text: "There is some kind of error, try again later...", 
+            icon: "error", 
+            button: "Back to website"
+          });
+        }
+      })
+      .catch(error => {
+        
+        swal({
+          title: "Oops!", 
+          text: "We encountered an issue, please try again in a bit.", 
+          icon: "error", 
+          button: "Back to website"
+        });
+      });
+    });
+  </script>
+		
 	</section>
 
 	<div class="spacer" data-height="96"></div>
