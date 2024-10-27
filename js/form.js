@@ -1,22 +1,29 @@
 document.getElementById('contact-form').addEventListener('submit', function(event) {
   event.preventDefault();
 
-  // Check if the user is within the cooldown period
+
+  const submitButton = document.querySelector('button[type="submit"]');
+  submitButton.disabled = true;
+
+
   const lastSubmissionTime = localStorage.getItem('lastSubmissionTime');
   const currentTime = new Date().getTime();
 
   if (lastSubmissionTime && currentTime - lastSubmissionTime < 10 * 60 * 1000) {
-    // Show error alert if within cooldown period (10 minutes)
+
     swal({
       title: "Form is already sent!",
       text: "You need to wait 10 minutes before submitting again.",
       icon: "info",
       button: "Back to website"
+    }).then(() => {
+
+      submitButton.disabled = false;
     });
     return;
   }
 
-  // If not within cooldown, proceed with form submission
+
   fetch(this.action, {
     method: 'POST',
     body: new FormData(this),
@@ -24,7 +31,7 @@ document.getElementById('contact-form').addEventListener('submit', function(even
   })
   .then(response => {
     if (response.ok) {
-      // Store the current time as the last successful submission time
+
       localStorage.setItem('lastSubmissionTime', currentTime);
 
       swal({
@@ -34,6 +41,8 @@ document.getElementById('contact-form').addEventListener('submit', function(even
         button: "Back to website"
       }).then(() => {
         document.getElementById('contact-form').reset();
+
+        submitButton.disabled = false;
       });
     } else {
       swal({
@@ -41,6 +50,9 @@ document.getElementById('contact-form').addEventListener('submit', function(even
         text: "We encountered an issue, please try again in a bit.",
         icon: "error",
         button: "Back to website"
+      }).then(() => {
+
+        submitButton.disabled = false;
       });
     }
   })
@@ -50,6 +62,9 @@ document.getElementById('contact-form').addEventListener('submit', function(even
       text: "We encountered an issue, please try again in a bit.",
       icon: "error",
       button: "Back to website"
+    }).then(() => {
+
+      submitButton.disabled = false;
     });
   });
 });
