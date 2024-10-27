@@ -1,29 +1,19 @@
 document.getElementById('contact-form').addEventListener('submit', function(event) {
   event.preventDefault();
 
-
   const submitButton = document.querySelector('button[type="submit"]');
-  submitButton.disabled = true;
-
+  submitButton.disabled = true; 
 
   const lastSubmissionTime = localStorage.getItem('lastSubmissionTime');
   const currentTime = new Date().getTime();
 
+  // Check cooldown period
   if (lastSubmissionTime && currentTime - lastSubmissionTime < 10 * 60 * 1000) {
-
-    swal({
-      title: "Form is already sent!",
-      text: "You need to wait 10 minutes before submitting again.",
-      icon: "info",
-      button: "Back to website"
-    }).then(() => {
-
-      submitButton.disabled = false;
-    });
+    showAlert("Form is already sent!", "You need to wait 10 minutes before submitting again.", "info", submitButton);
     return;
   }
 
-
+  // Submit form
   fetch(this.action, {
     method: 'POST',
     body: new FormData(this),
@@ -31,40 +21,28 @@ document.getElementById('contact-form').addEventListener('submit', function(even
   })
   .then(response => {
     if (response.ok) {
-
       localStorage.setItem('lastSubmissionTime', currentTime);
-
-      swal({
-        title: "Thanks for reaching out!",
-        text: "Expect a response shortly.",
-        icon: "success",
-        button: "Back to website"
-      }).then(() => {
-        document.getElementById('contact-form').reset();
-
-        submitButton.disabled = false;
-      });
+      showAlert("Thanks for reaching out!", "Expect a response shortly.", "success", submitButton)
+        .then(() => {
+          document.getElementById('contact-form').reset();
+          submitButton.disabled = false;  
+        });
     } else {
-      swal({
-        title: "Oops!",
-        text: "We encountered an issue, please try again in a bit.",
-        icon: "error",
-        button: "Back to website"
-      }).then(() => {
-
-        submitButton.disabled = false;
-      });
+      showAlert("Oops!", "We encountered an issue, please try again in a bit.", "error", submitButton);
     }
   })
   .catch(error => {
-    swal({
-      title: "Oops!",
-      text: "We encountered an issue, please try again in a bit.",
-      icon: "error",
+    showAlert("Oops!", "We encountered an issue, please try again in a bit.", "error", submitButton);
+  });
+
+  function showAlert(title, text, icon, button) {
+    return swal({
+      title: title,
+      text: text,
+      icon: icon,
       button: "Back to website"
     }).then(() => {
-
-      submitButton.disabled = false;
+      button.disabled = false; 
     });
-  });
+  }
 });
