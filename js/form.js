@@ -14,7 +14,7 @@ document.getElementById('contact-form').addEventListener('submit', function(even
 
   const captchaResponse = grecaptcha.getResponse();
   if (captchaResponse.length === 0) {
-    showAlert("Captcha required!", "Please complete the reCAPTCHA to submit the form.", "error", submitButton);
+    showAlert("Captcha required!", "Please complete the reCAPTCHA to submit the form.", "info", submitButton);
     submitButton.disabled = false;  
     return;
   }
