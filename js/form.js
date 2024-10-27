@@ -2,18 +2,23 @@ document.getElementById('contact-form').addEventListener('submit', function(even
   event.preventDefault();
 
   const submitButton = document.querySelector('button[type="submit"]');
-  submitButton.disabled = true; 
+  submitButton.disabled = true;
 
   const lastSubmissionTime = localStorage.getItem('lastSubmissionTime');
   const currentTime = new Date().getTime();
 
-  // Check cooldown period
   if (lastSubmissionTime && currentTime - lastSubmissionTime < 10 * 60 * 1000) {
     showAlert("Form is already sent!", "You need to wait 10 minutes before submitting again.", "info", submitButton);
     return;
   }
 
-  // Submit form
+  const captchaResponse = grecaptcha.getResponse();
+  if (captchaResponse.length === 0) {
+    showAlert("Captcha required!", "Please complete the reCAPTCHA to submit the form.", "error", submitButton);
+    submitButton.disabled = false;  
+    return;
+  }
+
   fetch(this.action, {
     method: 'POST',
     body: new FormData(this),
@@ -25,7 +30,8 @@ document.getElementById('contact-form').addEventListener('submit', function(even
       showAlert("Thanks for reaching out!", "Expect a response shortly.", "success", submitButton)
         .then(() => {
           document.getElementById('contact-form').reset();
-          submitButton.disabled = false;  
+          submitButton.disabled = false; 
+          grecaptcha.reset();  
         });
     } else {
       showAlert("Oops!", "We encountered an issue, please try again in a bit.", "error", submitButton);
@@ -42,7 +48,7 @@ document.getElementById('contact-form').addEventListener('submit', function(even
       icon: icon,
       button: "Back to website"
     }).then(() => {
-      button.disabled = false; 
+      button.disabled = false;
     });
   }
 });
