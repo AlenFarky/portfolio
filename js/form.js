@@ -9,7 +9,7 @@ document.getElementById('contact-form').addEventListener('submit', function(even
     // Show error alert if within cooldown period (10 minutes)
     swal({
       title: "Form is already sent!",
-      text: "You need to wait 10 minutes before submitting again. Please try later.",
+      text: "You need to wait 10 minutes before submitting again.",
       icon: "info",
       button: "Back to website"
     });
