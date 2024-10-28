@@ -30,7 +30,7 @@ document.getElementById('contact-form').addEventListener('submit', function(even
     '_subject': 'Form Submission', 
   };
 
-  fetch("https://formsubmit.co/ajax/contact@farky.xyz", {
+  fetch("https://formsubmit.co/ajax/c1a4565bb0ee860e10689d63fbed3dca", {
     method: "POST",
     headers: {
       'Content-Type': 'application/json',
