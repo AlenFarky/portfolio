@@ -36,6 +36,7 @@ document.getElementById('contact-form').addEventListener('submit', function(even
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     },
+    mode: "cors",
     body: JSON.stringify(formData)
   })
     .then(response => response.json())
