@@ -2,47 +2,60 @@ document.getElementById('contact-form').addEventListener('submit', function(even
   event.preventDefault();
 
   const submitButton = document.querySelector('button[type="submit"]');
-  submitButton.disabled = true;  // Disable the button immediately
+  submitButton.disabled = true;
 
   const lastSubmissionTime = localStorage.getItem('lastSubmissionTime');
   const currentTime = new Date().getTime();
 
-  // Check cooldown period
   if (lastSubmissionTime && currentTime - lastSubmissionTime < 10 * 60 * 1000) {
-    showAlert("Form is already sent!", "You need to wait 10 minutes before submitting again.", "info", submitButton);
+    swal({
+      title: "Form is already sent!",
+      text: "You need to wait 10 minutes before submitting again.",
+      icon: "info",
+      button: "Back to website"
+    }).then(() => {
+      submitButton.disabled = false;
+    });
     return;
   }
 
-  // Submit form
-  fetch(this.action, {
-    method: 'POST',
-    body: new FormData(this),
-    headers: { 'Accept': 'application/json' }
+  // Preparing form data
+  const formData = new FormData(this);
+  const data = Object.fromEntries(formData.entries());
+
+  fetch("https://formsubmit.co/ajax/c1a4565bb0ee860e10689d63fbed3dca", {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(data)
   })
-  .then(response => {
-    if (response.ok) {
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
       localStorage.setItem('lastSubmissionTime', currentTime);
-      showAlert("Thanks for reaching out!", "Expect a response shortly.", "success", submitButton)
-        .then(() => {
-          document.getElementById('contact-form').reset();
-          submitButton.disabled = false;  // Re-enable after success
-        });
+      swal({
+        title: "Thanks for reaching out!",
+        text: "Expect a response shortly.",
+        icon: "success",
+        button: "Back to website"
+      }).then(() => {
+        document.getElementById('contact-form').reset();
+        submitButton.disabled = false;
+      });
     } else {
-      showAlert("Oops!", "We encountered an issue, please try again in a bit.", "error", submitButton);
+      throw new Error("Form submission failed.");
     }
   })
   .catch(error => {
-    showAlert("Oops!", "We encountered an issue, please try again in a bit.", "error", submitButton);
-  });
-
-  function showAlert(title, text, icon, button) {
-    return swal({
-      title: title,
-      text: text,
-      icon: icon,
+    swal({
+      title: "Oops!",
+      text: "We encountered an issue, please try again in a bit.",
+      icon: "error",
       button: "Back to website"
     }).then(() => {
-      button.disabled = false;  // Re-enable the button after alert
+      submitButton.disabled = false;
     });
-  }
+  });
 });
