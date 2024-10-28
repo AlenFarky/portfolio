@@ -16,7 +16,6 @@ document.getElementById('contact-form').addEventListener('submit', function(even
     method: 'POST',
     body: new FormData(this),
     headers: { 'Accept': 'application/json' },
-    mode: 'no-cors'
   })
   .then(response => {
     if (response.ok) {
