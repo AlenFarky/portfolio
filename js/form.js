@@ -1,14 +1,24 @@
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('contact-form').addEventListener('submit', function (event) {
+    // Turnstile will auto-render based on the `cf-turnstile` class
+    const submitButton = document.querySelector('button[type="submit"]');
+    const form = document.getElementById('contact-form');
+
+    // Listen for Turnstile validation success
+    const onCaptchaSuccess = () => {
+        console.log('Captcha solved successfully');
+    };
+
+    // Attach the Turnstile success handler
+    window.turnstile = window.turnstile || {};
+    window.turnstile.onSuccess = onCaptchaSuccess;
+
+    form.addEventListener('submit', function (event) {
         event.preventDefault();
 
-        const submitButton = document.querySelector('button[type="submit"]');
         submitButton.disabled = true;
 
-        // Check the value of the captcha response before proceeding
         const captchaResponse = document.getElementById('cf-turnstile-response').value;
 
-        // Log directly inside the function to see what's happening
         console.log('Captcha Response:', captchaResponse);
 
         if (!captchaResponse) {
@@ -17,10 +27,10 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        const formData = new FormData(this);
+        const formData = new FormData(form);
         formData.append('cf-turnstile-response', captchaResponse);
 
-        fetch(this.action, {
+        fetch(form.action, {
             method: 'POST',
             body: formData,
             headers: { 'Accept': 'application/json' },
@@ -29,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then((data) => {
                 if (data.success) {
                     showAlert('Success!', 'Your form has been submitted successfully.', 'success', submitButton);
-                    document.getElementById('contact-form').reset();
+                    form.reset();
                 } else {
                     showAlert('Captcha Failed', 'Please complete the CAPTCHA correctly.', 'error', submitButton);
                 }
