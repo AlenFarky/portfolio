@@ -8,6 +8,7 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
     const currentTime = new Date().getTime();
 
     const captchaResponse = document.querySelector('input[name="cf-turnstile-response"]').value;
+    console.log('Captcha Response:', captchaResponse);
 
     // Honeypot Field
     const honeypotField = document.querySelector('input[name="_honey"]');
@@ -21,12 +22,8 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
     const formData = new FormData(this);
     formData.append('lastSubmissionTime', lastSubmissionTime || '');
     
-    const existingCaptcha = formData.get('cf-turnstile-response');
-if (existingCaptcha) {
-    formData.delete('cf-turnstile-response');
-}
-
-formData.append('cf-turnstile-response', captchaResponse);
+    const formData = new FormData(formElement);
+    formData.append('cf-turnstile-response', captchaResponse);
 
     fetch(this.action, {
         method: 'POST',
