@@ -4,37 +4,38 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
     const submitButton = document.querySelector('button[type="submit"]');
     submitButton.disabled = true;
 
-    const lastSubmissionTime = localStorage.getItem('lastSubmissionTime');
-    const currentTime = new Date().getTime();
+    const formData = new FormData(this);
 
-    // Honeypot Field
-    const honeypotField = document.querySelector('input[name="_honey"]');
-    const honeypotValue = honeypotField.value.trim();
+    // Get the CAPTCHA token from Turnstile
+    const captchaResponse = document.getElementById('cf-turnstile-response').value;
 
-    if (lastSubmissionTime && currentTime - lastSubmissionTime < 10 * 60 * 1000) {
-        return showAlert('Form is already sent!', 'You need to wait 10 minutes before submitting again.', 'info', submitButton);
+    if (!captchaResponse) {
+        showAlert('Captcha Required', 'Please complete the CAPTCHA.', 'error', submitButton);
+        submitButton.disabled = false;
+        return;
     }
 
-    // Collect form data
-    const formData = new FormData(this);
-    formData.append('lastSubmissionTime', lastSubmissionTime || '');
+    formData.append('cf-turnstile-response', captchaResponse);
 
     fetch(this.action, {
         method: 'POST',
         body: formData,
+        headers: { 'Accept': 'application/json' },
     })
         .then((response) => response.json())
         .then((data) => {
-            if (data.alert) {
-                showAlert(data.alert.title, data.alert.text, data.alert.icon, submitButton);
-                if (data.alert.icon === 'success') {
-                    localStorage.setItem('lastSubmissionTime', currentTime);
-                    this.reset();
-                }
+            if (data.success) {
+                showAlert('Success!', 'Your form has been submitted successfully.', 'success', submitButton);
+                document.getElementById('contact-form').reset();
+            } else {
+                showAlert('Captcha Failed', 'Please complete the CAPTCHA correctly.', 'error', submitButton);
             }
         })
         .catch(() => {
-            showAlert('Oops!', 'Error submitting the form. Please try again.', 'error', submitButton);
+            showAlert('Error!', 'Something went wrong. Please try again.', 'error', submitButton);
+        })
+        .finally(() => {
+            submitButton.disabled = false;
         });
 
     function showAlert(title, text, icon, button) {
@@ -42,7 +43,7 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
             title: title,
             text: text,
             icon: icon,
-            button: 'Back to website',
+            button: 'OK',
         }).then(() => {
             button.disabled = false;
         });
