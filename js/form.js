@@ -22,7 +22,7 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
     const formData = new FormData(this);
     formData.append('lastSubmissionTime', lastSubmissionTime || '');
     
-    const formData = new FormData(formElement);
+    const formData = new FormData(this);
     formData.append('cf-turnstile-response', captchaResponse);
 
     fetch(this.action, {
