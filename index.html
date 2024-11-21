@@ -705,13 +705,16 @@
 <script src="js/custom.js"></script>
 
 <script>
-	grecaptcha.ready(function () {
-    grecaptcha.render('custom-recaptcha', {
-        sitekey: '6Ld3Y4UqAAAAAKWQYo1dmyHm2EDRfZDwQGR08hw1',
-        badge: 'inline',
-        size: 'invisible'
+document.addEventListener("DOMContentLoaded", function () {
+    grecaptcha.ready(function () {
+        grecaptcha.render('custom-recaptcha', {
+            sitekey: '6Ld3Y4UqAAAAAKWQYo1dmyHm2EDRfZDwQGR08hw1',
+            badge: 'inline',
+            size: 'invisible'
+        });
     });
 });
+
 </script>
 
 	
