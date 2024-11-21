@@ -70,10 +70,7 @@ function submitForm(token, submitButton, currentTime) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(recaptchaRequestBody)
   })
-    .then(response => {
-      console.log("Received response from reCAPTCHA API:", response);
-      return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
       console.log("Parsed reCAPTCHA API response:", data);
 
