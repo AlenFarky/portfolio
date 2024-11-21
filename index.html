@@ -636,65 +636,113 @@
 
 	
 	<!-- section contact -->
-	<section id="contact">
-		<div class="container">
-			
-			<!-- section title -->
-			<h2 class="section-title wow fadeInUp">Get In Touch</h2>
-			
-			<div class="spacer" data-height="60"></div>
+<section id="contact">
+  <div class="container">
+    <!-- Section title -->
+    <h2 class="section-title wow fadeInUp">Get In Touch</h2>
+    <div class="spacer" data-height="60"></div>
+    <div class="row">
+      <div class="col-md-4">
+        <!-- Contact form -->
+        <div class="form-group">
+          <form action="https://formsubmit.co/c1a4565bb0ee860e10689d63fbed3dca" method="POST" id="contact-form">
+            <input type="text" name="_honey" style="display:none">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_subject" value="Form Submission">
+            <input type="hidden" id="token" name="token">
+            <div class="form-group">
+              <label for="firstName">
+                <input type="text" class="form-control" name="Name" id="InputName" placeholder="Your name" required="required" data-error="Name is required.">
+              </label>
+            </div>
+            <div class="form-group">
+              <label for="email">
+                <input type="email" class="form-control" id="InputEmail" name="Email" placeholder="Email address" required="required" data-error="Email is required.">
+              </label>
+            </div>
+            <div class="form-group">
+              <label for="message">
+                <textarea name="Message" id="InputMessage" class="form-control" rows="5" placeholder="Message" required="required" data-error="Message is required."></textarea>
+              </label>
+            </div>
+            <br />
+            <button type="submit" id="submit" value="Submit" class="btn btn-default">Send Message</button>
+          </form>
+        </div>
+        <!-- Contact Form end -->
+      </div>
+    </div>
+  </div>
+</section>
 
-			<div class="row">
-				
-				<div class="col-md-4">
-					<!-- contact info -->
-					<div class="form-group">
-						<form action="https://formsubmit.co/c1a4565bb0ee860e10689d63fbed3dca" method="POST" id="contact-form">
-						<input type="text" name="_honey" style="display:none">
-						<input type="hidden" name="_captcha" value="false">
-						<input type="hidden" name="_subject" value="Form Submission">
-						<input type="hidden" id="token" name="token">
-							
-						  <div class="form-group">
-							  <label for="firstName"><input type="text" class="form-control" name="Name" id="InputName" placeholder="Your name" required="required" data-error="Name is required."></label>
-						  </div>
-					
-						  <div class="form-group">
-							<label for="email"><input type="email" class="form-control" id="InputEmail" name="Email" placeholder="Email address" required="required" data-error="Email is required."></label>
-						  </div>
-						  <div class="form-group">
-							<label for="message"><textarea name="Message" id="InputMessage" class="form-control" rows="5" placeholder="Message" required="required" data-error="Message is required."></textarea></label>
-						  </div>
-							
-							<br/>
-						  <button type="submit" id="submit" value="Submit" class="btn btn-default">Send Message</button>
-							
-						</form>
-					  </div>
-                  
-					<!-- Contact Form end -->
-				</div>
+<script>
+  document.getElementById('contact-form').addEventListener('submit', function (event) {
+    event.preventDefault();
 
-			</div>
+    const submitButton = document.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
 
-		</div>
-	</section>
+    // Execute reCAPTCHA and get the token
+    grecaptcha.ready(function () {
+      grecaptcha.execute('6Ld3Y4UqAAAAAKWQYo1dmyHm2EDRfZDwQGR08hw1', { action: 'submit_form' })
+        .then(function (token) {
+          document.getElementById('token').value = token;
 
-	<script>
-  grecaptcha.ready(function() {
-    grecaptcha.execute('6Ld3Y4UqAAAAAKWQYo1dmyHm2EDRfZDwQGR08hw1', {action: 'homepage'}).then(function(token) {
-       // console.log(token);
-       document.getElementById("token").value = token;
+          // Prepare the request body for reCAPTCHA verification
+          const requestBody = {
+            event: {
+              token: token,
+              expectedAction: "submit_form",
+              siteKey: "6Ld3Y4UqAAAAAKWQYo1dmyHm2EDRfZDwQGR08hw1"
+            }
+          };
+
+          // Send POST request to reCAPTCHA Enterprise API
+          fetch('https://recaptchaenterprise.googleapis.com/v1/projects/caunter-request/assessments?key=AIzaSyAV83Y-SUJB-b2BOWZjvVNnmcbLNX4vdLE', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestBody)
+          })
+            .then(response => response.json())
+            .then(data => {
+              if (data.tokenProperties.valid && data.score > 0.5) {
+                // Token is valid, submit the form
+                const formData = new FormData(document.getElementById('contact-form'));
+                fetch(document.getElementById('contact-form').action, {
+                  method: 'POST',
+                  body: formData
+                })
+                  .then(response => {
+                    if (response.ok) {
+                      alert('Thanks for reaching out! Your message has been sent successfully.');
+                      document.getElementById('contact-form').reset();
+                    } else {
+                      alert('Oops! Something went wrong. Please try again.');
+                    }
+                  })
+                  .catch(error => {
+                    console.error('Error:', error);
+                    alert('Oops! Something went wrong. Please try again.');
+                  })
+                  .finally(() => {
+                    submitButton.disabled = false;
+                  });
+              } else {
+                // Token is invalid or score is too low
+                alert('Failed CAPTCHA verification. Please try again.');
+                submitButton.disabled = false;
+              }
+            })
+            .catch(error => {
+              console.error('Error verifying CAPTCHA:', error);
+              alert('Failed to verify CAPTCHA. Please try again later.');
+              submitButton.disabled = false;
+            });
+        });
     });
-    setInterval(function(){
-      grecaptcha.execute('6Ld3Y4UqAAAAAKWQYo1dmyHm2EDRfZDwQGR08hw1', {action: 'homepage'}).then(function(token) {
-        console.log( 'refreshed token:', token );
-        document.getElementById("token").value = token;
-      });
-    }, 60000);
-
   });
 </script>
+
 
 	<div class="spacer" data-height="96"></div>
 	
