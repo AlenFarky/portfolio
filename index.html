@@ -18,7 +18,7 @@
 	<link rel="stylesheet" href="css/style.css" type="text/css" media="all">
 	<link rel="stylesheet" href="css/snow.css" type="text/css" media="all">
 
-
+	<script src="https://www.google.com/recaptcha/api.js?render=6Ld3Y4UqAAAAAKWQYo1dmyHm2EDRfZDwQGR08hw1"></script>
 	
 
 </head>
@@ -653,7 +653,7 @@
 						<input type="text" name="_honey" style="display:none">
 						<input type="hidden" name="_captcha" value="false">
 						<input type="hidden" name="_subject" value="Form Submission">
-
+						<input type="hidden" id="token" name="token">
 							
 						  <div class="form-group">
 							  <label for="firstName"><input type="text" class="form-control" name="Name" id="InputName" placeholder="Your name" required="required" data-error="Name is required."></label>
@@ -665,17 +665,9 @@
 						  <div class="form-group">
 							<label for="message"><textarea name="Message" id="InputMessage" class="form-control" rows="5" placeholder="Message" required="required" data-error="Message is required."></textarea></label>
 						  </div>
-
-
-							 <script>
-								   function onSubmit(token) {
-								     document.getElementById("contact-form").submit();
-								   }
-							</script>
-							
 							
 							<br/>
-						  <button type="submit" id="submit" value="Submit" class="btn btn-default" class="g-recaptcha" data-sitekey="6Ld3Y4UqAAAAAKWQYo1dmyHm2EDRfZDwQGR08hw1" data-callback='onSubmit' data-action='submit'>Send Message</button>
+						  <button type="submit" id="submit" value="Submit" class="btn btn-default">Send Message</button>
 							
 						</form>
 					  </div>
@@ -688,6 +680,22 @@
 		</div>
 	</section>
 
+	<script>
+  grecaptcha.ready(function() {
+    grecaptcha.execute('6Ld3Y4UqAAAAAKWQYo1dmyHm2EDRfZDwQGR08hw1', {action: 'homepage'}).then(function(token) {
+       // console.log(token);
+       document.getElementById("token").value = token;
+    });
+    setInterval(function(){
+      grecaptcha.execute('6Ld3Y4UqAAAAAKWQYo1dmyHm2EDRfZDwQGR08hw1', {action: 'homepage'}).then(function(token) {
+        console.log( 'refreshed token:', token );
+        document.getElementById("token").value = token;
+      });
+    }, 60000);
+
+  });
+</script>
+
 	<div class="spacer" data-height="96"></div>
 	
 </main>
@@ -697,8 +705,6 @@
 
 <!-- SCRIPTS -->
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script src="https://www.google.com/recaptcha/api.js"></script>
-<script src="https://www.google.com/recaptcha/enterprise.js?render=6Ld3Y4UqAAAAAKWQYo1dmyHm2EDRfZDwQGR08hw1"></script>
 <script src="https://formspree.io/js/formbutton-v1.min.js" defer></script>
 <script src="js/form.js"></script>
 <script src="js/jquery-1.12.3.min.js"></script>
