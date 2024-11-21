@@ -28,23 +28,36 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
     return; // Stop form submission
   }
 
-  // Validate reCAPTCHA token
-  const recaptchaTokenField = document.getElementById('token');
-  const recaptchaToken = recaptchaTokenField ? recaptchaTokenField.value : null;
+  console.log("Fetching reCAPTCHA token...");
 
-  console.log("reCAPTCHA token fetched:", recaptchaToken);
+  // Execute reCAPTCHA to fetch a token
+  grecaptcha.ready(function () {
+    grecaptcha.execute('6Ld3Y4UqAAAAAKWQYo1dmyHm2EDRfZDwQGR08hw1', { action: 'submit_form' })
+      .then(function (token) {
+        console.log("reCAPTCHA token successfully fetched:", token);
 
-  if (!recaptchaToken || typeof recaptchaToken !== 'string' || recaptchaToken.length < 50) {
-    console.log("Invalid or missing reCAPTCHA token.");
-    showAlert("Oops!", "reCAPTCHA verification failed. Please reload the page and try again.", "error", submitButton);
-    submitButton.disabled = false;
-    return; // Stop form submission
-  }
+        // Set the token value
+        const recaptchaTokenField = document.getElementById('token');
+        recaptchaTokenField.value = token;
+
+        // Now proceed with the form submission logic
+        submitForm(token, submitButton, currentTime);
+      })
+      .catch(function (error) {
+        console.error("reCAPTCHA execution error:", error);
+        showAlert("Oops!", "Failed to execute reCAPTCHA. Please reload the page and try again.", "error", submitButton);
+        submitButton.disabled = false;
+      });
+  });
+});
+
+function submitForm(token, submitButton, currentTime) {
+  console.log("Submitting form with token:", token);
 
   // Verify reCAPTCHA token via Enterprise API
   const recaptchaRequestBody = {
     event: {
-      token: recaptchaToken,
+      token: token,
       expectedAction: "submit_form",
       siteKey: "6Ld3Y4UqAAAAAKWQYo1dmyHm2EDRfZDwQGR08hw1"
     }
@@ -120,17 +133,16 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
       showAlert("Oops!", "Failed to verify reCAPTCHA. Please try again later.", "error", submitButton);
       submitButton.disabled = false;
     });
+}
 
-  // SweetAlert function
-  function showAlert(title, text, icon, button) {
-    console.log("Displaying alert:", { title, text, icon });
-    return swal({
-      title: title,
-      text: text,
-      icon: icon,
-      button: "Back to website"
-    }).then(() => {
-      button.disabled = false;
-    });
-  }
-});
+function showAlert(title, text, icon, button) {
+  console.log("Displaying alert:", { title, text, icon });
+  return swal({
+    title: title,
+    text: text,
+    icon: icon,
+    button: "Back to website"
+  }).then(() => {
+    button.disabled = false;
+  });
+}
