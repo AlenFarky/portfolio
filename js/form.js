@@ -23,6 +23,15 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
     return;
   }
 
+   // Validate reCAPTCHA token
+  const recaptchaTokenField = document.getElementById('token');
+  const recaptchaToken = recaptchaTokenField.value;
+
+  if (!recaptchaToken || recaptchaToken.length < 50) {
+    showAlert("Oops!", "reCAPTCHA verification failed. Please reload the page and try again.", "error", submitButton);
+    return; // Stop form submission
+  }
+
 
   fetch('https://api.ipify.org?format=json')
     .then(response => response.json())
