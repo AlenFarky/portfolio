@@ -12,35 +12,29 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
   const honeypotField = document.querySelector('input[name="_honey"]');
   const honeypotValue = honeypotField.value.trim();
 
-  // Honeypot field check
   if (honeypotValue !== '') {
-    console.log("Honeypot field triggered. Suspected bot submission.");
     showAlert("Oops!", "We encountered an issue, please try again in a bit.", "error", submitButton);
     submitButton.disabled = false;
-    return; // Stop form submission
+    return;
   }
 
-  // Submission time limit (10 minutes)
   if (lastSubmissionTime && currentTime - lastSubmissionTime < 10 * 60 * 1000) {
     console.log("Submission blocked due to time limit.");
     showAlert("Form is already sent!", "You need to wait 10 minutes before submitting again.", "info", submitButton);
     submitButton.disabled = false;
-    return; // Stop form submission
+    return;
   }
 
   console.log("Fetching reCAPTCHA token...");
 
-  // Execute reCAPTCHA to fetch a token
   grecaptcha.ready(function () {
     grecaptcha.execute('6Ld3Y4UqAAAAAKWQYo1dmyHm2EDRfZDwQGR08hw1', { action: 'submit_form' })
       .then(function (token) {
-        console.log("reCAPTCHA token successfully fetched:", token);
+        console.log("reCAPTCHA token successfully fetched!");
 
-        // Set the token value
         const recaptchaTokenField = document.getElementById('token');
         recaptchaTokenField.value = token;
 
-        // Now proceed with the form submission logic
         submitForm(token, submitButton, currentTime);
       })
       .catch(function (error) {
@@ -52,9 +46,8 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
 });
 
 function submitForm(token, submitButton, currentTime) {
-  console.log("Submitting form with token:", token);
+  console.log("Submitting form with token...");
 
-  // Verify reCAPTCHA token via Enterprise API
   const recaptchaRequestBody = {
     event: {
       token: token,
@@ -72,7 +65,7 @@ function submitForm(token, submitButton, currentTime) {
   })
     .then(response => response.json())
     .then(data => {
-      console.log("Parsed reCAPTCHA API response:", data);
+      console.log("Parsed reCAPTCHA API response.");
       if (data.tokenProperties && data.tokenProperties.valid === true && data.riskAnalysis && data.riskAnalysis.score > 0.5) {
         console.log("reCAPTCHA verification passed. Fetching IP...");
 
@@ -86,11 +79,11 @@ function submitForm(token, submitButton, currentTime) {
             recaptchaTokenField.value = token;
             
             const formData = new FormData(document.getElementById('contact-form'));
-            formData.append('IP Address', ipAddress);
+            formData.append('IP', ipAddress);
 
             formData.delete('token');
 
-            console.log("Sending form data to action URL...");
+            console.log("Sending form data to email...");
             fetch(document.getElementById('contact-form').action, {
               method: 'POST',
               body: formData,
