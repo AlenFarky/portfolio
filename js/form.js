@@ -18,9 +18,13 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
         return showAlert('Form is already sent!', 'You need to wait 10 minutes before submitting again.', 'info', submitButton);
     }
 
-
+    // Prepare the form data
     const formData = new FormData(this);
-    formData.append('cf-turnstile-response', captchaResponse);
+
+    // Check if the captcha response is already in the form data
+    if (!formData.has('cf-turnstile-response')) {
+        formData.append('cf-turnstile-response', captchaResponse); // Only append if it's missing
+    }
 
     fetch(this.action, {
         method: 'POST',
