@@ -55,7 +55,7 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
         });
     })
     .catch(error => {
-      showAlert("Oops!", "Could not fetch your IP address. Please try again later.", "error", submitButton);
+      showAlert("Oops!", "We encountered an issue, please try again in a bit.", "error", submitButton);
       submitButton.disabled = false;
     });
 
