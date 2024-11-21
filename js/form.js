@@ -7,7 +7,7 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
     const lastSubmissionTime = localStorage.getItem('lastSubmissionTime');
     const currentTime = new Date().getTime();
 
-    const captchaResponse = document.getElementById('cf-turnstile-response').value;
+    const captchaResponse = document.getElementByName('cf-turnstile-response').value;
 
     // Honeypot Field
     const honeypotField = document.querySelector('input[name="_honey"]');
