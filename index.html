@@ -663,23 +663,7 @@
                 <textarea name="Message" id="InputMessage" class="form-control" rows="5" placeholder="Message" required="required" data-error="Message is required."></textarea>
               </label>
             </div>
-            <br />
-
-		  <script>
-
-			window.onloadTurnstileCallback = function () {
-			  turnstile.render("#example-container", {
-			    sitekey: "0x4AAAAAAA0lA7ubfueW3nYV",
-			    callback: function (token) {
-			      console.log(`Challenge Success ${token}`);
-			    },
-			  });
-			};
-			
-			turnstile.ready(onLoadTrunstileCallBack);
-
-			</script>
-		  
+            <br />	  
 		  <div class="cf-turnstile" data-sitekey="0x4AAAAAAA0lA7ubfueW3nYV"></div>
 		<br />
             <button type="submit" id="submit" value="Submit" class="btn btn-default">Send Message</button>
