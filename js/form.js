@@ -1,53 +1,62 @@
+document.addEventListener('DOMContentLoaded', function () {
+    turnstile.render('.cf-turnstile', {
+        sitekey: '0x4AAAAAAA0lA7ubfueW3nYV',
+        callback: function (token) {
+            const captchaResponseField = document.getElementById('cf-turnstile-response');
+            if (captchaResponseField) {
+                captchaResponseField.value = token;
+            } else {
+                console.error('Hidden input for CAPTCHA response not found.');
+            }
+        },
+    });
+});
+
 document.getElementById('contact-form').addEventListener('submit', function (event) {
     event.preventDefault();
 
     const submitButton = document.querySelector('button[type="submit"]');
     submitButton.disabled = true;
 
-    const lastSubmissionTime = localStorage.getItem('lastSubmissionTime');
-    const currentTime = new Date().getTime();
-
-    const captchaResponse = document.getElementById('cf-turnstile-response').value;
-
-    // Honeypot Field
-    const honeypotField = document.querySelector('input[name="_honey"]');
-    const honeypotValue = honeypotField.value.trim();
-
-    if (lastSubmissionTime && currentTime - lastSubmissionTime < 10 * 60 * 1000) {
-        return showAlert('Form is already sent!', 'You need to wait 10 minutes before submitting again.', 'info', submitButton);
+    const captchaResponse = document.getElementById('cf-turnstile-response');
+    if (!captchaResponse || !captchaResponse.value) {
+        showAlert('Captcha Required', 'Please complete the CAPTCHA.', 'error', submitButton);
+        submitButton.disabled = false;
+        return;
     }
 
-    // Collect form data
     const formData = new FormData(this);
-    formData.append('lastSubmissionTime', lastSubmissionTime || '');
-    formData.append('cf-turnstile-response', captchaResponse);
+    formData.append('cf-turnstile-response', captchaResponse.value);
 
     fetch(this.action, {
         method: 'POST',
         body: formData,
+        headers: { 'Accept': 'application/json' },
     })
         .then((response) => response.json())
         .then((data) => {
-            if (data.alert) {
-                showAlert(data.alert.title, data.alert.text, data.alert.icon, submitButton);
-                if (data.alert.icon === 'success') {
-                    localStorage.setItem('lastSubmissionTime', currentTime);
-                    this.reset();
-                }
+            if (data.success) {
+                showAlert('Success!', 'Your form has been submitted successfully.', 'success', submitButton);
+                document.getElementById('contact-form').reset();
+            } else {
+                showAlert('Captcha Failed', 'Please complete the CAPTCHA correctly.', 'error', submitButton);
             }
         })
         .catch(() => {
-            showAlert('Oops!', 'Error submitting the form. Please try again.', 'error', submitButton);
+            showAlert('Error!', 'Something went wrong. Please try again.', 'error', submitButton);
+        })
+        .finally(() => {
+            submitButton.disabled = false;
         });
-
-    function showAlert(title, text, icon, button) {
-        return swal({
-            title: title,
-            text: text,
-            icon: icon,
-            button: 'Back to website',
-        }).then(() => {
-            button.disabled = false;
-        });
-    }
 });
+
+function showAlert(title, text, icon, button) {
+    return swal({
+        title: title,
+        text: text,
+        icon: icon,
+        button: 'OK',
+    }).then(() => {
+        button.disabled = false;
+    });
+}
