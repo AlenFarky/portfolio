@@ -6,15 +6,17 @@ document.addEventListener('DOMContentLoaded', function () {
         const submitButton = document.querySelector('button[type="submit"]');
         submitButton.disabled = true;
 
-        const captchaResponse = document.getElementById('cf-turnstile-response');
-        if (!captchaResponse || !captchaResponse.value) {
+        // Ensure the Turnstile response has been populated
+        const captchaResponse = document.getElementById('cf-turnstile-response').value;
+
+        if (!captchaResponse) {
             showAlert('Captcha Required', 'Please complete the CAPTCHA.', 'error', submitButton);
             submitButton.disabled = false;
             return;
         }
 
         const formData = new FormData(this);
-        formData.append('cf-turnstile-response', captchaResponse.value);
+        formData.append('cf-turnstile-response', captchaResponse);
 
         fetch(this.action, {
             method: 'POST',
