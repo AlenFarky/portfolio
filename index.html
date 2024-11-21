@@ -665,9 +665,17 @@
 						  <div class="form-group">
 							<label for="message"><textarea name="Message" id="InputMessage" class="form-control" rows="5" placeholder="Message" required="required" data-error="Message is required."></textarea></label>
 						  </div>
-								
+
+
+							 <script>
+								   function onSubmit(token) {
+								     document.getElementById("contact-form").submit();
+								   }
+							</script>
+							
+							
 							<br/>
-						  <button type="submit" id="submit" value="Submit" class="btn btn-default">Send Message</button>
+						  <button type="submit" id="submit" value="Submit" class="btn btn-default" class="g-recaptcha" data-sitekey="6Ld3Y4UqAAAAAKWQYo1dmyHm2EDRfZDwQGR08hw1" data-callback='onSubmit' data-action='submit'>Send Message</button>
 							
 						</form>
 					  </div>
@@ -689,6 +697,8 @@
 
 <!-- SCRIPTS -->
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://www.google.com/recaptcha/api.js"></script>
+<script src="https://www.google.com/recaptcha/enterprise.js?render=6Ld3Y4UqAAAAAKWQYo1dmyHm2EDRfZDwQGR08hw1"></script>
 <script src="https://formspree.io/js/formbutton-v1.min.js" defer></script>
 <script src="js/form.js"></script>
 <script src="js/jquery-1.12.3.min.js"></script>
