@@ -6,38 +6,40 @@ document.addEventListener('DOMContentLoaded', function () {
         const submitButton = document.querySelector('button[type="submit"]');
         submitButton.disabled = true;
 
-        // Ensure the Turnstile response has been populated
-        const captchaResponse = document.getElementById('cf-turnstile-response').value;
+        // Adding a small delay to ensure Turnstile response has time to populate
+        setTimeout(function () {
+            const captchaResponse = document.getElementById('cf-turnstile-response').value;
 
-        if (!captchaResponse) {
-            showAlert('Captcha Required', 'Please complete the CAPTCHA.', 'error', submitButton);
-            submitButton.disabled = false;
-            return;
-        }
-
-        const formData = new FormData(this);
-        formData.append('cf-turnstile-response', captchaResponse);
-
-        fetch(this.action, {
-            method: 'POST',
-            body: formData,
-            headers: { 'Accept': 'application/json' },
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.success) {
-                    showAlert('Success!', 'Your form has been submitted successfully.', 'success', submitButton);
-                    document.getElementById('contact-form').reset();
-                } else {
-                    showAlert('Captcha Failed', 'Please complete the CAPTCHA correctly.', 'error', submitButton);
-                }
-            })
-            .catch(() => {
-                showAlert('Error!', 'Something went wrong. Please try again.', 'error', submitButton);
-            })
-            .finally(() => {
+            if (!captchaResponse) {
+                showAlert('Captcha Required', 'Please complete the CAPTCHA.', 'error', submitButton);
                 submitButton.disabled = false;
-            });
+                return;
+            }
+
+            const formData = new FormData(document.getElementById('contact-form'));
+            formData.append('cf-turnstile-response', captchaResponse);
+
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' },
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        showAlert('Success!', 'Your form has been submitted successfully.', 'success', submitButton);
+                        document.getElementById('contact-form').reset();
+                    } else {
+                        showAlert('Captcha Failed', 'Please complete the CAPTCHA correctly.', 'error', submitButton);
+                    }
+                })
+                .catch(() => {
+                    showAlert('Error!', 'Something went wrong. Please try again.', 'error', submitButton);
+                })
+                .finally(() => {
+                    submitButton.disabled = false;
+                });
+        }, 500); // Delay to allow Turnstile response time
     });
 
     function showAlert(title, text, icon, button) {
