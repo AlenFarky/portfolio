@@ -77,7 +77,7 @@ function submitForm(token, submitButton, currentTime) {
     .then(data => {
       console.log("Parsed reCAPTCHA API response:", data);
 
-      if (data.tokenProperties && data.tokenProperties.valid && data.score > 0.5) {
+      if (data.tokenProperties.valid && data.score > 0.5) {
         console.log("reCAPTCHA verification passed. Fetching IP...");
 
         fetch('https://api.ipify.org?format=json')
