@@ -18,10 +18,7 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
         return showAlert('Form is already sent!', 'You need to wait 10 minutes before submitting again.', 'info', submitButton);
     }
 
-    // Collect form data
-    const formData = new FormData(this);
-    formData.append('lastSubmissionTime', lastSubmissionTime || '');
-    
+
     const formData = new FormData(this);
     formData.append('cf-turnstile-response', captchaResponse);
 
