@@ -13,21 +13,24 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
   // Check honeypot field
   if (honeypotValue !== '') {
     showAlert("Oops!", "We encountered an issue, please try again in a bit.", "error", submitButton);
+    submitButton.disabled = false;
     return; // Stop form submission
   }
 
   // Check submission time limit (10 minutes)
   if (lastSubmissionTime && currentTime - lastSubmissionTime < 10 * 60 * 1000) {
     showAlert("Form is already sent!", "You need to wait 10 minutes before submitting again.", "info", submitButton);
-    return;
+    submitButton.disabled = false;
+    return; // Stop form submission
   }
 
   // Validate reCAPTCHA token
   const recaptchaTokenField = document.getElementById('token');
   const recaptchaToken = recaptchaTokenField.value;
 
-  if (!recaptchaToken || recaptchaToken.length < 50) {
+  if (!recaptchaToken || typeof recaptchaToken !== 'string' || recaptchaToken.length < 50) {
     showAlert("Oops!", "reCAPTCHA verification failed. Please reload the page and try again.", "error", submitButton);
+    submitButton.disabled = false;
     return; // Stop form submission
   }
 
@@ -47,7 +50,7 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
   })
     .then(response => response.json())
     .then(data => {
-      if (data.tokenProperties.valid && data.score > 0.5) {
+      if (data.tokenProperties && data.tokenProperties.valid && data.score > 0.5) {
         // Token is valid, proceed to send form data
         fetch('https://api.ipify.org?format=json')
           .then(response => response.json())
@@ -95,6 +98,7 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
       submitButton.disabled = false;
     });
 
+  // SweetAlert function
   function showAlert(title, text, icon, button) {
     return swal({
       title: title,
