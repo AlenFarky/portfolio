@@ -7,19 +7,30 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
   const lastSubmissionTime = localStorage.getItem('lastSubmissionTime');
   const currentTime = new Date().getTime();
 
+
+   const honeypotField = document.querySelector('input[name="_honey"]');
+  const honeypotValue = honeypotField.value.trim(); 
+
+  // Check if honeypot field has any value
+  if (honeypotValue !== '') {
+    showAlert("Oops!", "We encountered an issue, please try again in a bit.", "error", submitButton);
+    return; // Stop form submission
+  }
+
+  
   if (lastSubmissionTime && currentTime - lastSubmissionTime < 10 * 60 * 1000) {
     showAlert("Form is already sent!", "You need to wait 10 minutes before submitting again.", "info", submitButton);
     return;
   }
 
-  // Fetch the user's IP address
+
   fetch('https://api.ipify.org?format=json')
     .then(response => response.json())
     .then(data => {
       const ipAddress = data.ip;
       const formData = new FormData(this);
 
-      // Append the IP address to the form data
+     
       formData.append('IP Address', ipAddress);
 
       fetch(this.action, {
