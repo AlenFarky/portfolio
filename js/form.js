@@ -85,6 +85,17 @@ function submitForm(token, submitButton, currentTime) {
             const formData = new FormData(document.getElementById('contact-form'));
             formData.append('IP Address', ipAddress);
 
+                        // Set the reCAPTCHA token in the hidden input field
+            const recaptchaTokenField = document.getElementById('token');
+            recaptchaTokenField.value = token;
+          
+            // Before sending the form to FormSubmit, remove the token field
+            // to avoid sending it in the POST request.
+            const tokenField = document.getElementById('token');
+            if (tokenField) {
+              tokenField.remove();
+            }
+
             console.log("Sending form data to action URL...");
             fetch(document.getElementById('contact-form').action, {
               method: 'POST',
