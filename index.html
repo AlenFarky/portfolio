@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<link rel="shortcut icon" type="image/x-icon" href="">
 	<meta name="yandex-verification" content="ef2a9674ba6a9c10" />
-	<script src="https://www.google.com/recaptcha/api.js?render=6Ld3Y4UqAAAAAKWQYo1dmyHm2EDRfZDwQGR08hw1"></script>
+	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
 	
 	<!-- STYLESHEETS -->
 	<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" media="all">
@@ -664,7 +664,23 @@
               </label>
             </div>
             <br />
-		  <div class="custom-recaptcha"></div>
+
+		  <script>
+
+			window.onloadTurnstileCallback = function () {
+			  turnstile.render("#example-container", {
+			    sitekey: "0x4AAAAAAA0lA7ubfueW3nYV",
+			    callback: function (token) {
+			      console.log(`Challenge Success ${token}`);
+			    },
+			  });
+			};
+			
+			turnstile.ready(onLoadTrunstileCallBack);
+
+			</script>
+		  
+		  <div class="cf-turnstile" data-sitekey="0x4AAAAAAA0lA7ubfueW3nYV"></div>
 		<br />
             <button type="submit" id="submit" value="Submit" class="btn btn-default">Send Message</button>
           </form>
@@ -680,10 +696,9 @@
 </main>
 
 <!-- Go to top button -->
-<!-- <a href="javascript:" id="return-to-top"><i class="fas fa-arrow-up"></i></a> -->
+<a href="javascript:" id="return-to-top"><i class="fas fa-arrow-up"></i></a>
 
 <!-- SCRIPTS -->
-<script src="https://www.google.com/recaptcha/enterprise.js?render=6Ld3Y4UqAAAAAKWQYo1dmyHm2EDRfZDwQGR08hw1"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="https://formspree.io/js/formbutton-v1.min.js" defer></script>
 <script src="js/form.js"></script>
