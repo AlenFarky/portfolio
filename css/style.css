@@ -1074,6 +1074,10 @@ section.home.light .social-icons li a:hover {
   margin-bottom: 15px;
 }
 
+.g-recaptcha-badge {
+    display: block;
+}
+
 .pf-filter-wrapper {
   display: none;
 }
