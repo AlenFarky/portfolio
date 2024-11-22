@@ -14,10 +14,6 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
     const honeypotField = document.querySelector('input[name="_honey"]');
     const honeypotValue = honeypotField.value.trim();
 
-    if (lastSubmissionTime && currentTime - lastSubmissionTime < 10 * 60 * 1000) {
-        return showAlert('Form is already sent!', 'You need to wait 10 minutes before submitting again.', 'info', submitButton);
-    }
-
     // Prepare the form data
     const formData = new FormData(this);
 
