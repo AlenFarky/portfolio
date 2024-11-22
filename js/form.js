@@ -21,24 +21,27 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
         .then((response) => response.json())
         .then((data) => {
             if (data.alert) {
-                showAlert(data.alert.title, data.alert.text, data.alert.icon, submitButton);
+                showAlert(data.alert.title, data.alert.text, data.alert.icon);
                 if (data.alert.icon === 'success') {
                     this.reset(); // Reset the form on success
                 }
             }
         })
         .catch(() => {
-            showAlert('Oops!', 'Error submitting the form. Please try again.', 'error', submitButton);
+            showAlert('Oops!', 'Error submitting the form. Please try again.', 'info');
         });
 
-    function showAlert(title, text, icon, button) {
-        return swal({
-            title: title,
-            text: text,
-            icon: icon,
-            button: 'Back to website',
-        }).then(() => {
-            button.disabled = false;
-        });
-    }
+function showAlert(title, text, icon) {
+    return Swal.fire({
+        icon: icon,
+        title: title,
+        text: text,
+        showConfirmButton: false,
+        timer: 2100
+      }).then(() => {
+        button.disabled = false;
+    }); 
+  }
 });
+
+
