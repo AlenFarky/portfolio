@@ -4,9 +4,6 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
     const submitButton = document.querySelector('button[type="submit"]');
     submitButton.disabled = true;
 
-    const lastSubmissionTime = localStorage.getItem('lastSubmissionTime');
-    const currentTime = new Date().getTime();
-
     const captchaResponse = document.querySelector('input[name="cf-turnstile-response"]').value;
     console.log('Captcha Response:', captchaResponse);
 
@@ -31,7 +28,6 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
             if (data.alert) {
                 showAlert(data.alert.title, data.alert.text, data.alert.icon, submitButton);
                 if (data.alert.icon === 'success') {
-                    localStorage.setItem('lastSubmissionTime', currentTime); // Update the last submission time
                     this.reset(); // Reset the form on success
                 }
             }
