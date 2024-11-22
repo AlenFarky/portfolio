@@ -5,7 +5,6 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
     submitButton.disabled = true;
 
     const captchaResponse = document.querySelector('input[name="cf-turnstile-response"]').value;
-    console.log('Captcha Response:', captchaResponse);
 
     // Honeypot Field
     const honeypotField = document.querySelector('input[name="_honey"]');
