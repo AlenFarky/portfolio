@@ -6,12 +6,11 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
 
     const captchaResponse = document.querySelector('input[name="cf-turnstile-response"]').value;
     
-    // Prepare the form data
     const formData = new FormData(this);
 
     // Check if the captcha response is already in the form data
     if (!formData.has('cf-turnstile-response')) {
-        formData.append('cf-turnstile-response', captchaResponse); // Only append if it's missing
+        formData.append('cf-turnstile-response', captchaResponse);
     }
 
     fetch(this.action, {
@@ -21,27 +20,31 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
         .then((response) => response.json())
         .then((data) => {
             if (data.alert) {
-                showAlert(data.alert.title, data.alert.text, data.alert.icon);
-                if (data.alert.icon === 'success') {
-                    this.reset(); // Reset the form on success
-                }
+                showAlert(data.alert.title, data.alert.text, data.alert.icon)
+                    .then(() => {
+                        submitButton.disabled = false;
+                        if (data.alert.icon === 'success') {
+                            this.reset();
+                        }
+                    });
             }
         })
         .catch(() => {
-            showAlert('Oops!', 'Error submitting the form. Please try again.', 'info');
+            showAlert('Oops!', 'Error submitting the form. Please try again.', 'info')
+                .then(() => {
+                    submitButton.disabled = false;
+                });
         });
 
-function showAlert(title, text, icon) {
-    return Swal.fire({
-        icon: icon,
-        title: title,
-        text: text,
-        showConfirmButton: false,
-        timer: 2100
-      }).then(() => {
-        button.disabled = false;
-    }); 
-  }
+    function showAlert(title, text, icon) {
+        return Swal.fire({
+            icon: icon,
+            title: title,
+            text: text,
+            showConfirmButton: false,
+            timer: 2100
+        });
+    }
 });
 
 
