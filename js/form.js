@@ -42,7 +42,7 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
             title: title,
             text: text,
             showConfirmButton: false,
-            timer: 2350
+            timer: 2400
         });
     }
 });
