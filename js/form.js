@@ -30,7 +30,7 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
             }
         })
         .catch(() => {
-            showAlert('Oops!', 'Error submitting the form. Please try again.', 'info')
+            showAlert('Oops!', 'Error submitting the form. Please try again.', 'error')
                 .then(() => {
                     submitButton.disabled = false;
                 });
@@ -42,7 +42,7 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
             title: title,
             text: text,
             showConfirmButton: false,
-            timer: 2100
+            timer: 2350
         });
     }
 });
