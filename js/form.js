@@ -31,8 +31,8 @@ document.getElementById('contact-form').addEventListener('submit', function (eve
             if (data.alert) {
                 showAlert(data.alert.title, data.alert.text, data.alert.icon, submitButton);
                 if (data.alert.icon === 'success') {
-                    localStorage.setItem('lastSubmissionTime', currentTime);
-                    this.reset();
+                    localStorage.setItem('lastSubmissionTime', currentTime); // Update the last submission time
+                    this.reset(); // Reset the form on success
                 }
             }
         })
